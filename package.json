@@ -1,0 +1,27 @@
+{
+  "name": "auto_s3",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx sass ./src/index.scss dist/bundle.css --style compressed",
+    "prefix": "postcss dist/bundle.css --use=autoprefixer --output=dist/bundle.css",
+    "build:all": "npm run build && npm run prefix"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rolled-potatoes/auto_s3.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rolled-potatoes/auto_s3/issues"
+  },
+  "homepage": "https://github.com/rolled-potatoes/auto_s3#readme",
+  "dependencies": {
+    "autoprefixer": "^10.4.8",
+    "postcss-cli": "^10.0.0",
+    "sass": "^1.54.9"
+  }
+}
