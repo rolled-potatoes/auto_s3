@@ -20,14 +20,17 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+     #https://github.com/marketplace/actions/get-current-package-version
+     #get version use package.json
+      - name: Get current package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.2.3  
+
       - name : install Dependencies
         run : npm i 
         
       - name : build
         run : npm run build:all
         
-      - name : get build_version
-        run : script/set_version.sh
-        
       - name : checking
-        run : echo ${{ steps.package-version.outputs.current-version}}
+        run : echo ${ { steps.package-version.outputs.current-version } }
