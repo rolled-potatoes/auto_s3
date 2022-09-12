@@ -1,0 +1,52 @@
+# This is a basic workflow to help you get started with Actions
+
+name: s3
+
+on:
+  push:
+    branches: [ "main" ]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-18.04
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses : actions/setup-node@v3
+        with :
+          node-version: 16
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '2.7' 
+
+       #https://github.com/marketplace/actions/get-current-package-version
+       #get version use package.json
+      - name: Get current package version
+        id: package-version
+        uses: martinbeentjes/npm-get-version-action@v1.2.3  
+
+      - name : install Dependencies
+        run : npm i 
+        
+      - name : build
+        run : npm run build:all
+        
+      - name : checking
+        run : echo ${{ steps.package-version.outputs.current-version}}
+
+      - name : s3 deploy
+        env : 
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID  }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run : |
+          aws s3 sync ./dist ${{ secrets.AWS_BASE_URL }}/${{ steps.package-version.outputs.current-version}}
